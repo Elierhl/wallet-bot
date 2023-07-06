@@ -19,6 +19,6 @@ def generate_balls() -> InlineKeyboardMarkup:
     for item in balls_mask:
         builder.button(
             text=balls[item],
-            callback_data=BallsCallbackFactory(color=data[item]).pack()
+            callback_data=BallsCallbackFactory(color=data[item]).pack(),
         )
     return builder.adjust(3).as_markup()

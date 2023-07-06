@@ -3,10 +3,10 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.utils.callback_answer import CallbackAnswerMiddleware
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from bot.config_reader import config
-from bot.handlers import commands, callbacks
+from bot.handlers import callbacks, commands
 from bot.middlewares import DbSessionMiddleware
 from bot.ui_commands import set_ui_commands
 
@@ -32,7 +32,7 @@ async def main():
     # Set bot commands in UI
     await set_ui_commands(bot)
 
-    logging.info('Bot started.')
+    logging.info("Bot started.")
 
     # Run bot
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())

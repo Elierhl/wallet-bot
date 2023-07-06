@@ -9,4 +9,3 @@ class User(Base):
     user_id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     name = Column(String)
     lang = Column(String)
-

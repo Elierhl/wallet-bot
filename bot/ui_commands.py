@@ -1,5 +1,5 @@
 from aiogram import Bot
-from aiogram.types import BotCommandScopeAllPrivateChats, BotCommand
+from aiogram.types import BotCommand, BotCommandScopeAllPrivateChats
 
 
 async def set_ui_commands(bot: Bot):
@@ -9,9 +9,6 @@ async def set_ui_commands(bot: Bot):
     """
     commands = [
         BotCommand(command="play", description="Start new game"),
-        BotCommand(command="top", description="View top players")
+        BotCommand(command="top", description="View top players"),
     ]
-    await bot.set_my_commands(
-        commands=commands,
-        scope=BotCommandScopeAllPrivateChats()
-    )
+    await bot.set_my_commands(commands=commands, scope=BotCommandScopeAllPrivateChats())
