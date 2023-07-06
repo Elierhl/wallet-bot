@@ -1,10 +1,12 @@
-from sqlalchemy import Column, Integer, BigInteger
+from sqlalchemy import Column, Integer, String
 
 from bot.db.base import Base
 
 
-class PlayerScore(Base):
-    __tablename__ = "playerscore"
+class User(Base):
+    __tablename__ = "users"
 
-    user_id = Column(BigInteger, primary_key=True, unique=True, autoincrement=False)
-    score = Column(Integer, default=0)
+    user_id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    name = Column(String)
+    lang = Column(String)
+

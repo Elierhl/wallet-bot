@@ -1,9 +1,9 @@
-from pydantic import BaseSettings, SecretStr, PostgresDsn
+from pydantic import BaseSettings, SecretStr
 
 
 class Settings(BaseSettings):
     bot_token: SecretStr
-    db_url: PostgresDsn
+    db_url: SecretStr
 
     class Config:
         env_file = '.env'

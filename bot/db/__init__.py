@@ -1,7 +1,7 @@
 from .base import Base
-from .models import PlayerScore
+from .models import User
 
 __all__ = [
     "Base",
-    "PlayerScore"
+    "User"
 ]

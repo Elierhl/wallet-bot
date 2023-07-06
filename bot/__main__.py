@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.utils.callback_answer import CallbackAnswerMiddleware
@@ -11,7 +12,9 @@ from bot.ui_commands import set_ui_commands
 
 
 async def main():
-    engine = create_async_engine(url=config.db_url, echo=True)
+    logging.basicConfig(level=logging.INFO)
+
+    engine = create_async_engine(url=config.db_url.get_secret_value(), echo=True)
     sessionmaker = async_sessionmaker(engine, expire_on_commit=False)
 
     bot = Bot(config.bot_token.get_secret_value(), parse_mode="HTML")
@@ -28,6 +31,8 @@ async def main():
 
     # Set bot commands in UI
     await set_ui_commands(bot)
+
+    logging.info('Bot started.')
 
     # Run bot
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
