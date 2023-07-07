@@ -1,5 +1,5 @@
 from aiogram.filters.callback_data import CallbackData
 
 
-class BallsCallbackFactory(CallbackData, prefix="ball"):
-    color: str
+class NavigationCallback(CallbackData, prefix="navigation"):
+    to: str

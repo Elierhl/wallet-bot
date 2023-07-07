@@ -1,0 +1,10 @@
+version: "1"
+
+services:
+  wallet:
+    build: .
+    x-develop:
+      watch:
+        - action: sync
+          path: ./bot
+          target: /app/bot
