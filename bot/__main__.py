@@ -1,23 +1,23 @@
 import asyncio
 import logging
+from os import getenv
 
 from aiogram import Bot, Dispatcher
 from aiogram.utils.callback_answer import CallbackAnswerMiddleware
+from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
-from bot.config_reader import config
 from bot.handlers import callbacks, commands
 from bot.middlewares import DbSessionMiddleware
-from bot.ui_commands import set_ui_commands
+from bot.utils import set_ui_commands
 
 
 async def main():
-    logging.basicConfig(level=logging.INFO)
-
-    engine = create_async_engine(url=config.db_url.get_secret_value(), echo=True)
+    load_dotenv()
+    engine = create_async_engine(url=getenv('DB_URL'), echo=True)
     sessionmaker = async_sessionmaker(engine, expire_on_commit=False)
 
-    bot = Bot(config.bot_token.get_secret_value(), parse_mode="HTML")
+    bot = Bot(getenv('BOT_TOKEN'), parse_mode="HTML")
 
     # Setup dispatcher and bind routers to it
     dp = Dispatcher()
@@ -32,6 +32,7 @@ async def main():
     # Set bot commands in UI
     await set_ui_commands(bot)
 
+    logging.basicConfig(level=logging.INFO)
     logging.info("Bot started.")
 
     # Run bot

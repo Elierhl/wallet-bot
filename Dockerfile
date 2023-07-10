@@ -8,6 +8,7 @@ WORKDIR /app
 COPY bot /app/bot
 COPY .env /app
 COPY requirements.txt /app
+COPY main.py /app
 
 RUN apt-get update
 RUN apt-get upgrade -y
