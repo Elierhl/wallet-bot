@@ -16,6 +16,13 @@ class User(Base):
     # api_key: Mapped['ApiKey'] = relationship(back_populates='user')
 
 
+class MarkupHash(Base):
+    __tablename__ = "markup_hashes"
+
+    tg_id: Mapped[int] = mapped_column(primary_key=True)
+    hash: Mapped[str]
+
+
 # class ApiKey(Base):
 #     __tablename__ = "api_keys"
 #
