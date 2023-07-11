@@ -1,10 +1,7 @@
-import logging
-import sys
-
 from aiogram import Bot
 from aiogram.types import BotCommand, BotCommandScopeAllPrivateChats
 
-from bot.phrases import UI_COMMANDS
+from bot.consts.phrases import UI_COMMANDS
 
 
 async def set_ui_commands(bot: Bot):

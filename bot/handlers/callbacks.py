@@ -5,23 +5,18 @@ from typing import Union
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot import markups
-from bot.custom import cryptocur_api, states
-from bot.custom.common import HashedCallback, NavigationCallback
-from bot.middlewares import HashValidatorMiddleware
-from bot.phrases import DEPOSIT, MAIN_MENU, NETWORKS, WITHDRAW
+from bot.classes import states
+from bot.classes.common import NavigationCallback
+from bot.consts.phrases import DEPOSIT, MAIN_MENU, NETWORKS, WITHDRAW
+from bot.db.models import *
+from bot.http_requests import coingecko_api, cryptocurrency_api
 
 router = Router(name="callbacks-router")
-hashed_router = Router(name='hashed-router')
-hashed_router.callback_query.middleware(HashValidatorMiddleware())
-
 logger = logging.getLogger(__name__)
-
-
-@hashed_router.callback_query(HashedCallback.filter())
-async def hashed_handler(query: CallbackQuery):
-    await query.message.edit_text('Match!')
 
 
 @router.callback_query(NavigationCallback.filter(F.where == 'menu'))
@@ -42,9 +37,25 @@ async def menu_generator_handler(
 
 
 @router.callback_query(NavigationCallback.filter(F.where == 'my_wallet'))
-async def my_wallet_handler(query: CallbackQuery):
+async def my_wallet_handler(query: CallbackQuery, session: AsyncSession):
+    stmt = select(UserBalance.btc, UserBalance.usdt).where(
+        User.tg_id == query.from_user.id
+    )
+    balances = await session.execute(stmt)
+    btc, usdt = balances.all()[0]
+
+    btc_price = (await coingecko_api.get_price('bitcoin', 'rub'))['bitcoin']['rub']
+    usdt_price = (await coingecko_api.get_price('tether', 'rub'))['tether']['rub']
+    btc_rub_equivalent = round(btc_price * btc)
+    usdt_rub_equivalent = round(usdt_price * usdt)
+
     await query.message.edit_text(
-        MAIN_MENU['my_wallet'],
+        MAIN_MENU['my_wallet'].format(
+            btc=btc,
+            usdt=usdt,
+            btc_rub_equivalent=btc_rub_equivalent,
+            usdt_rub_equivalent=usdt_rub_equivalent,
+        ),
         reply_markup=markups.my_wallet_markup(),
     )
 
@@ -62,8 +73,8 @@ async def deposit_proceeding_handler(
     query: CallbackQuery, callback_data: NavigationCallback
 ):
     currency = callback_data.where.split('_')[1]
-    address = await cryptocur_api.give_address(
-        telegram_id=query.from_user.id,
+    address = await cryptocurrency_api.give_address(
+        tg_id=query.from_user.id,
         currency=currency,
     )
     await query.message.edit_text(
@@ -145,7 +156,7 @@ async def withdraw_confirmation_handler(message: Message, state: FSMContext):
 @router.callback_query(NavigationCallback.filter(F.where == 'withdraw_proceed'))
 async def withdraw_proceeding_handler(query: CallbackQuery, state: FSMContext):
     user_data = await state.get_data()
-    response = await cryptocur_api.send_crypto(
+    response = await cryptocurrency_api.send_crypto(
         amount=user_data['amount'],
         currency=user_data['currency'],
         address=user_data['address'],

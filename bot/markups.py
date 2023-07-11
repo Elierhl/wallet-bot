@@ -1,7 +1,7 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.custom.common import HashedCallback, NavigationCallback
-from bot.phrases import BUTTONS
+from bot.classes.common import NavigationCallback
+from bot.consts.phrases import BUTTONS
 
 
 def start_markup():
@@ -16,7 +16,6 @@ def main_menu_markup():
         builder.button(
             text=BUTTONS[target], callback_data=NavigationCallback(where=target)
         )
-    builder.button(text='hash', callback_data=HashedCallback(hash_='12digitshash'))
     return builder.adjust(2, 1).as_markup(resize_keyboard=True)
 
 

@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
 from bot import markups
-from bot.phrases import MAIN_MENU
+from bot.consts.phrases import MAIN_MENU
 
 router = Router(name="commands-router")
 

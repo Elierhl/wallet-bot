@@ -1,6 +1,5 @@
 import asyncio
 import logging
-import sys
 from os import getenv
 
 from aiogram import Bot, Dispatcher
@@ -8,8 +7,8 @@ from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
+from bot.classes.middlewares import DbSessionMiddleware
 from bot.handlers import callbacks, commands
-from bot.middlewares import DbSessionMiddleware
 from bot.utils import set_ui_commands
 
 
@@ -29,7 +28,6 @@ async def main():
     # Register handlers
     dp.include_router(commands.router)
     dp.include_router(callbacks.router)
-    dp.include_router(callbacks.hashed_router)
     # Set bot commands in UI
     await set_ui_commands(bot)
 
