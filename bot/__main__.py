@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 from os import getenv
 
 from aiogram import Bot, Dispatcher
@@ -28,16 +29,17 @@ async def main():
     # Register handlers
     dp.include_router(commands.router)
     dp.include_router(callbacks.router)
-
+    dp.include_router(callbacks.hashed_router)
     # Set bot commands in UI
     await set_ui_commands(bot)
-
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Bot started.")
 
     # Run bot
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+
+    logger = logging.getLogger(__name__)
+    logger.info("Bot started.")
     asyncio.run(main())

@@ -8,10 +8,20 @@ from aiogram.types import CallbackQuery, Message
 
 from bot import markups
 from bot.custom import cryptocur_api, states
-from bot.custom.common import NavigationCallback
+from bot.custom.common import HashedCallback, NavigationCallback
+from bot.middlewares import HashValidatorMiddleware
 from bot.phrases import DEPOSIT, MAIN_MENU, NETWORKS, WITHDRAW
 
 router = Router(name="callbacks-router")
+hashed_router = Router(name='hashed-router')
+hashed_router.callback_query.middleware(HashValidatorMiddleware())
+
+logger = logging.getLogger(__name__)
+
+
+@hashed_router.callback_query(HashedCallback.filter())
+async def hashed_handler(query: CallbackQuery):
+    await query.message.edit_text('Match!')
 
 
 @router.callback_query(NavigationCallback.filter(F.where == 'menu'))
