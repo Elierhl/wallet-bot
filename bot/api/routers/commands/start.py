@@ -4,8 +4,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.services.markups import menu
 from bot.common import constants
+from bot.services.markups import menu
 from bot.services.user import user_service
 
 router = Router(name="start-command-router")

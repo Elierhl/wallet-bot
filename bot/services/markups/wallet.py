@@ -1,7 +1,7 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.common.callbacks import NavigationCallback
 from bot.common import constants
+from bot.common.callbacks import NavigationCallback
 
 
 def my_wallet_markup():
@@ -14,5 +14,7 @@ def my_wallet_markup():
         text=constants.BUTTONS['withdraw'],
         callback_data=NavigationCallback(where='withdraw'),
     )
-    builder.button(text=constants.BUTTONS['back'], callback_data=NavigationCallback(where='menu'))
+    builder.button(
+        text=constants.BUTTONS['back'], callback_data=NavigationCallback(where='menu')
+    )
     return builder.adjust(2, 2).as_markup(resize_keyboard=True)

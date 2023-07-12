@@ -8,7 +8,9 @@ class Logger:
     def __init__(self, name):
         self.name = name
         self.log_filepath = settings.LOGGER_FILE_PATH
-        self.format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S")
+        self.format = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S"
+        )
 
     def get_logger(self):
         logger = logging.getLogger(self.name)

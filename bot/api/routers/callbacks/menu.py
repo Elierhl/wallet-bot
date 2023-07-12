@@ -1,8 +1,8 @@
-from bot.common.callbacks import NavigationCallback
-from aiogram.types import CallbackQuery
 from aiogram import F, Router
+from aiogram.types import CallbackQuery
 
 from bot.common import constants
+from bot.common.callbacks import NavigationCallback
 from bot.services.markups import menu
 
 router = Router(name="menu-callback-router")

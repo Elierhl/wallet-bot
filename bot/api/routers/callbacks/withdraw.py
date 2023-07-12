@@ -1,13 +1,12 @@
 from typing import Union
 
-from aiogram.fsm.context import FSMContext
-
-from bot.common.callbacks import NavigationCallback
-from aiogram.types import CallbackQuery, Message
 from aiogram import F, Router
+from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery, Message
 
 from bot.common import constants, states
-from bot.services.markups import withdraw, menu
+from bot.common.callbacks import NavigationCallback
+from bot.services.markups import menu, withdraw
 from bot.services.withdraw import withdraw_service
 
 router = Router(name="withdraw-callback-router")

@@ -1,7 +1,7 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.common.callbacks import NavigationCallback
 from bot.common import constants
+from bot.common.callbacks import NavigationCallback
 
 
 def withdraw_currency_markup():
@@ -11,14 +11,17 @@ def withdraw_currency_markup():
         callback_data=NavigationCallback(where='withdraw_BTC'),
     )
     builder.button(
-        text=constants.BUTTONS['back'], callback_data=NavigationCallback(where='my_wallet')
+        text=constants.BUTTONS['back'],
+        callback_data=NavigationCallback(where='my_wallet'),
     )
     return builder.as_markup(resize_keyboard=True)
 
 
 def withdraw_step_back_markup(where):
     builder = InlineKeyboardBuilder()
-    builder.button(text=constants.BUTTONS['back'], callback_data=NavigationCallback(where=where))
+    builder.button(
+        text=constants.BUTTONS['back'], callback_data=NavigationCallback(where=where)
+    )
     return builder.as_markup(resize_keyboard=True)
 
 

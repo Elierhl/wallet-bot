@@ -1,8 +1,8 @@
 from aiohttp import ClientSession
 
 from bot.common import constants
-from bot.common.logger import Logger
 from bot.common.helpers import response_processing
+from bot.common.logger import Logger
 
 
 class CoingeckoService:

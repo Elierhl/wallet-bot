@@ -8,7 +8,6 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-
 from bot.common.config import settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

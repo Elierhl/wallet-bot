@@ -6,8 +6,8 @@ from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 from bot.api import router
 from bot.common.config import settings
 from bot.common.logger import Logger
-from bot.db.db import create_async_session
 from bot.common.utils import set_ui_commands
+from bot.db.db import create_async_session
 
 LOGGER = Logger(__name__).get_logger()
 

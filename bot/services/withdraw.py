@@ -1,8 +1,8 @@
 import re
 
-from bot.common import constants, states
 from aiogram.types import CallbackQuery, Message
 
+from bot.common import constants, states
 from bot.services.cryptocurrency import cryptocurrency_service
 
 
@@ -34,7 +34,9 @@ class WithdrawService:
             currency=user_data['currency'],
             address=user_data['address'],
         )
-        text = constants.WITHDRAW['success'] if response else constants.WITHDRAW['failed']
+        text = (
+            constants.WITHDRAW['success'] if response else constants.WITHDRAW['failed']
+        )
         return text
 
 

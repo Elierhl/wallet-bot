@@ -1,6 +1,6 @@
-from sqlalchemy import select, insert
+from sqlalchemy import insert, select
 
-from bot.schemas.user import UserBalance, User
+from bot.schemas.user import User, UserBalance
 
 
 class UserRepository:
