@@ -1,3 +1,5 @@
+from os import getenv
+
 from aiohttp import ClientSession
 
 from bot.consts import urls
@@ -9,20 +11,24 @@ async def send_crypto(amount, currency, address):
     async with ClientSession() as session:
         params = {
             'amount': amount,
-            'currency': currency.lower(),
-            'address': address,
+            'to': address,
         }
-        async with session.post(urls.CC_SEND_CRYPTO, params=params) as response:
+        async with session.post(
+            urls.CC_SEND_CRYPTO.format(currency=currency.lower()),
+            params=params,
+            headers={'CCAPI-KEY': getenv('cryptocurrency_token')},
+        ) as response:
             response = await response_processing(response)
             return response['result']
 
 
 async def give_address(tg_id, currency):
     async with ClientSession() as session:
-        params = {
-            'currency': currency.lower(),
-            'telegram_id': tg_id,
-        }
-        async with session.post(urls.CC_GIVE_ADDRESS, params=params) as response:
+        params = {'label': tg_id}
+        async with session.post(
+            urls.CC_GIVE_ADDRESS.format(currency=currency.lower()),
+            params=params,
+            headers={'CCAPI-KEY': getenv('cryptocurrency_token')},
+        ) as response:
             response = await response_processing(response)
             return response['result']['address']

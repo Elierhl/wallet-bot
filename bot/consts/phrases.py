@@ -10,6 +10,7 @@ MAIN_MENU = {
     'USDT: {usdt} USDT {usdt_rub_equivalent}',
     'support': 'Здесь будет тех. поддержка.',
     'settings': 'Здесь будут настройки.',
+    'rub_equivalent': ' ≈ {rub} RUB',
 }
 
 DEPOSIT = {

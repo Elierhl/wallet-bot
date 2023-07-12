@@ -14,9 +14,6 @@ async def get_price(crypto, fiat):
             'ids': crypto,
             'vs_currencies': fiat,
         }
-        logger.info(f'!! cg_api0 {params=}')
         async with session.get(urls.CG_GET_PRICE, params=params) as response:
-            logger.info(f'!! cg_api1 {response=}')
             response = await response_processing(response)
-            logger.info(f'!! cg_api2 {response=}')
             return response

@@ -44,10 +44,21 @@ async def my_wallet_handler(query: CallbackQuery, session: AsyncSession):
     balances = await session.execute(stmt)
     btc, usdt = balances.all()[0]
 
-    btc_price = (await coingecko_api.get_price('bitcoin', 'rub'))['bitcoin']['rub']
-    usdt_price = (await coingecko_api.get_price('tether', 'rub'))['tether']['rub']
-    btc_rub_equivalent = round(btc_price * btc)
-    usdt_rub_equivalent = round(usdt_price * usdt)
+    if btc:
+        btc_price = (await coingecko_api.get_price('bitcoin', 'rub'))['bitcoin']['rub']
+        btc_rub_equivalent = MAIN_MENU['rub_equivalent'].format(
+            rub=round(btc_price * btc)
+        )
+    else:
+        btc_rub_equivalent = ''
+
+    if usdt:
+        usdt_price = (await coingecko_api.get_price('tether', 'rub'))['tether']['rub']
+        usdt_rub_equivalent = MAIN_MENU['rub_equivalent'].format(
+            rub=round(usdt_price * usdt)
+        )
+    else:
+        usdt_rub_equivalent = ''
 
     await query.message.edit_text(
         MAIN_MENU['my_wallet'].format(
