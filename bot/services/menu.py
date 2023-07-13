@@ -1,12 +1,19 @@
 from bot.common import constants
-from bot.repositories.user import user_repository
-from bot.services.coingecko import coingecko_service
+from bot.db.user import database_user
+from bot.services.external.coingecko import coingecko_service
 
 
-class WalletService:
-    async def get_wallet_data(self, db_session, user_tg_id):
-        btc, usdt = await user_repository.get_user_balance(
-            db_session=db_session, tg_id=user_tg_id
+class MenuController:
+    async def initiate_user(self, message, db_session):
+        tg_id = message.from_user.id
+        username = message.from_user.username
+        await database_user.create_user(tg_id, username, db_session)
+        user_id = await database_user.get_user_id(tg_id, db_session)
+        await database_user.create_user_balance(user_id, db_session)
+
+    async def get_wallet_data(self, db_session, tg_id):
+        btc, usdt = await database_user.get_user_balance(
+            db_session=db_session, tg_id=tg_id
         )
 
         if btc:
@@ -37,4 +44,4 @@ class WalletService:
         }
 
 
-wallet_service = WalletService()
+menu_controller = MenuController()

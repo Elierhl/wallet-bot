@@ -6,8 +6,8 @@ from aiogram.types import CallbackQuery, Message
 
 from bot.common import constants, states
 from bot.common.callbacks import NavigationCallback
-from bot.services.markups import menu, withdraw
-from bot.services.withdraw import withdraw_service
+from bot.markups import menu, withdraw
+from bot.services.withdraw import withdraw_controller
 
 router = Router(name="withdraw-callback-router")
 
@@ -24,7 +24,7 @@ async def withdraw_choose_currency_handler(query: CallbackQuery):
 async def withdraw_provide_address_handler(
     query: CallbackQuery, callback_data: NavigationCallback, state: FSMContext
 ):
-    await withdraw_service.provide_address(callback_data, state)
+    await withdraw_controller.provide_address(callback_data, state)
     await query.message.edit_text(
         constants.WITHDRAW['address'],
         reply_markup=withdraw.withdraw_step_back_markup('withdraw'),
@@ -36,10 +36,12 @@ async def withdraw_provide_address_handler(
 async def withdraw_provide_amount_handler(
     message: Union[Message, CallbackQuery], state: FSMContext
 ):
-    reply_markup_type = await withdraw_service.provide_amount(message, state)
+    reply_markup_type = await withdraw_controller.provide_amount(message, state)
+    if isinstance(message, CallbackQuery):
+        message = message.message
 
     if reply_markup_type:
-        await message.message.answer(
+        await message.answer(
             constants.WITHDRAW['amount'],
             reply_markup=withdraw.withdraw_step_back_markup(reply_markup_type),
         )
@@ -47,7 +49,7 @@ async def withdraw_provide_amount_handler(
 
 @router.message(states.Withdraw.amount)
 async def withdraw_confirmation_handler(message: Message, state: FSMContext):
-    user_data = await withdraw_service.get_confirmation(message, state)
+    user_data = await withdraw_controller.get_confirmation(message, state)
 
     if user_data:
         await message.answer(
@@ -67,17 +69,6 @@ async def withdraw_confirmation_handler(message: Message, state: FSMContext):
 
 @router.callback_query(NavigationCallback.filter(F.where == 'withdraw_proceed'))
 async def withdraw_proceeding_handler(query: CallbackQuery, state: FSMContext):
-    text = await withdraw_service.proceed_withdrawal(state)
+    text = await withdraw_controller.proceed_withdrawal(state)
     await query.message.answer(text, reply_markup=menu.start_markup())
     await state.clear()
-
-
-# @router.callback_query(NavigationCallback.filter(F.where == 'SQL'))
-# async def cc_api_handler(query: CallbackQuery, session: AsyncSession):
-#     stmt = select(User.username).where(User.id == 1)
-#     res = await session.execute(stmt)
-#     res = res.scalar()
-#     await query.message.edit_text(
-#         f'This is your name: {res} and tg_id: {query.from_user.id}',
-#         reply_markup=markups.start_markup()
-#     )

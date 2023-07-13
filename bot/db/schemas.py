@@ -1,9 +1,9 @@
 from typing import Optional
 
 from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, declarative_base, mapped_column, relationship
 
-from bot.schemas.base import Base
+Base = declarative_base()
 
 
 class User(Base):

@@ -3,8 +3,8 @@ from aiogram.types import CallbackQuery
 
 from bot.common import constants
 from bot.common.callbacks import NavigationCallback
-from bot.services.cryptocurrency import cryptocurrency_service
-from bot.services.markups import deposit, menu
+from bot.markups import deposit, menu
+from bot.services.external.cryptocurrency import cryptocurrency_service
 
 router = Router(name="deposit-callback-router")
 

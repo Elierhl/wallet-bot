@@ -3,10 +3,10 @@ import re
 from aiogram.types import CallbackQuery, Message
 
 from bot.common import constants, states
-from bot.services.cryptocurrency import cryptocurrency_service
+from bot.services.external.cryptocurrency import cryptocurrency_service
 
 
-class WithdrawService:
+class WithdrawController:
     async def provide_address(self, callback_data, state):
         await state.update_data(currency=callback_data.where.split('_')[1])
         await state.set_state(states.Withdraw.address)
@@ -40,4 +40,4 @@ class WithdrawService:
         return text
 
 
-withdraw_service = WithdrawService()
+withdraw_controller = WithdrawController()
