@@ -1,6 +1,5 @@
 from aiogram import F, Router
 from aiogram.types import CallbackQuery
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.common import constants
 from bot.common.callbacks import NavigationCallback
@@ -28,10 +27,8 @@ async def menu_generator_handler(
 
 
 @router.callback_query(NavigationCallback.filter(F.where == 'my_wallet'))
-async def my_wallet_handler(query: CallbackQuery, session: AsyncSession):
-    my_wallet_data = await menu_controller.get_wallet_data(
-        tg_id=query.from_user.id, db_session=session
-    )
+async def my_wallet_handler(query: CallbackQuery):
+    my_wallet_data = await menu_controller.get_wallet_data(tg_id=query.from_user.id)
     await query.message.edit_text(
         constants.MAIN_MENU['my_wallet'].format(**my_wallet_data),
         reply_markup=menu.my_wallet_markup(),

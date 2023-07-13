@@ -1,22 +1,19 @@
-from aiohttp import ClientSession
-
 from bot.common import constants
-from bot.common.logger import Logger
-from bot.services.external.utils import response_processing
+from bot.services.external.utils import AsyncRequest
 
 
-class CoingeckoService:
+class CoingeckoService(AsyncRequest):
     def __init__(self):
-        self.logger = Logger("CoingeckoService").get_logger()
+        super().__init__(module_name=__name__)
 
     async def get_price(self, crypto, fiat):
-        async with ClientSession() as session:
+        async with self.session_pool() as session:
             params = {
                 'ids': crypto,
                 'vs_currencies': fiat,
             }
             async with session.get(constants.CG_GET_PRICE, params=params) as response:
-                response = await response_processing(response)
+                response = await self.response_processing(response)
                 return response
 
 

@@ -1,13 +1,11 @@
 import asyncio
 
 from aiogram import Bot, Dispatcher
-from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 
 from bot.api import router
 from bot.common.config import settings
 from bot.common.logger import Logger
 from bot.common.utils import set_ui_commands
-from bot.db.db import create_async_session
 
 LOGGER = Logger(__name__).get_logger()
 
@@ -17,10 +15,6 @@ async def main():
 
     # Setup dispatcher and bind routers to it
     dp = Dispatcher()
-    dp.update.middleware(create_async_session())
-    # Automatically reply to all callbacks
-    dp.callback_query.middleware(CallbackAnswerMiddleware())
-
     # Register handlers
     dp.include_router(router)
     # Set bot commands in UI

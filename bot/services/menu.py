@@ -4,17 +4,15 @@ from bot.services.external.coingecko import coingecko_service
 
 
 class MenuController:
-    async def initiate_user(self, message, db_session):
+    async def initiate_user(self, message):
         tg_id = message.from_user.id
         username = message.from_user.username
-        await database_user.create_user(tg_id, username, db_session)
-        user_id = await database_user.get_user_id(tg_id, db_session)
-        await database_user.create_user_balance(user_id, db_session)
+        await database_user.create_user(tg_id, username)
+        user_id = await database_user.get_user_id(tg_id)
+        await database_user.create_user_balance(user_id)
 
-    async def get_wallet_data(self, db_session, tg_id):
-        btc, usdt = await database_user.get_user_balance(
-            db_session=db_session, tg_id=tg_id
-        )
+    async def get_wallet_data(self, tg_id):
+        btc, usdt = await database_user.get_user_balance(tg_id=tg_id)
 
         if btc:
             btc_price = (await coingecko_service.get_price('bitcoin', 'rub'))[
