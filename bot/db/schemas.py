@@ -11,10 +11,10 @@ class User(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     tg_id: Mapped[int] = mapped_column(unique=True)
-    username: Mapped[str] = mapped_column(String(30))
-    phone: Mapped[Optional[str]] = mapped_column(String(30))
+    username: Mapped[str] = mapped_column(String(100))
+    phone: Mapped[Optional[str]] = mapped_column(String(100))
 
-    balances: Mapped['UserBalance'] = relationship()
+    balances: Mapped['UserBalance'] = relationship(back_populates='user')
 
 
 class UserBalance(Base):
@@ -24,7 +24,14 @@ class UserBalance(Base):
     btc: Mapped[float] = mapped_column(default=0)
     usdt: Mapped[float] = mapped_column(default=0)
 
-    user: Mapped['User'] = relationship()
+    user: Mapped['User'] = relationship(back_populates='balances')
+
+
+class Transaction(Base):
+    __tablename__ = "transactions_test"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    data: Mapped[str] = mapped_column(String(100))
 
 
 # class MarkupHash(Base):

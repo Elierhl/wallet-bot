@@ -1,7 +1,7 @@
-from sqlalchemy import insert, select
+from sqlalchemy import func, insert, select
 
-from bot.db.schemas import User, UserBalance
-from bot.db.utils import Database
+from bot.db.base import Database
+from bot.db.schemas import Transaction, User, UserBalance
 
 
 class DatabaseUser(Database):
@@ -47,6 +47,16 @@ class DatabaseUser(Database):
             async with self.session_pool() as session:
                 await session.execute(insert(UserBalance), params)
                 await session.commit()
+
+    async def get_transactions(self, tg_id, limit, offset):
+        async with self.session_pool() as session:
+            stmt = select(Transaction).limit(limit).offset(offset)
+            return (await session.execute(stmt)).all()
+
+    async def get_total_transactions(self, tg_id):
+        async with self.session_pool() as session:
+            stmt = select(func.count(Transaction.id))
+            return (await session.execute(stmt)).scalar()
 
 
 database_user = DatabaseUser()

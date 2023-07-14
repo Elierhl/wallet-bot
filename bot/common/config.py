@@ -2,7 +2,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "crypto_bot"
+    PROJECT_NAME: str = "wallet_bot"
     ENV_NAME: str = "development"
     LOGGER_FILE_PATH: str = "../output.log"
 
