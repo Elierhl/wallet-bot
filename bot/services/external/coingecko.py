@@ -1,5 +1,5 @@
 from bot.common import constants
-from bot.services.external.utils import AsyncRequest
+from bot.services.external.base import AsyncRequest
 
 
 class CoingeckoService(AsyncRequest):

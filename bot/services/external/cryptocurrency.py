@@ -1,6 +1,6 @@
 from bot.common import constants
 from bot.common.config import settings
-from bot.services.external.utils import AsyncRequest
+from bot.services.external.base import AsyncRequest
 
 
 class CryptocurrencyService(AsyncRequest):

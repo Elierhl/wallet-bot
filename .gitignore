@@ -31,3 +31,4 @@ venv.bak/
 
 # Alembic
 alembic/versions
+bot/common/error_handler.py

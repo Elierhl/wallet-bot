@@ -1,7 +1,7 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.common import constants
-from bot.common.callbacks import NavigationCallback
+from bot.common.callbacks import NavigationCallback, PagesCallback
 
 
 def start_markup():
@@ -19,7 +19,11 @@ def main_menu_markup():
             text=constants.BUTTONS[target],
             callback_data=NavigationCallback(where=target),
         )
-    return builder.adjust(2, 1).as_markup(resize_keyboard=True)
+    builder.button(
+        text=constants.BUTTONS['transactions'],
+        callback_data=PagesCallback(number=1),
+    )
+    return builder.adjust(2, 2).as_markup(resize_keyboard=True)
 
 
 def back_to_main_menu_markup():
@@ -53,3 +57,14 @@ def my_wallet_markup():
         text=constants.BUTTONS['back'], callback_data=NavigationCallback(where='menu')
     )
     return builder.adjust(2, 2).as_markup(resize_keyboard=True)
+
+
+def my_transactions_markup(total_pages):
+    builder = InlineKeyboardBuilder()
+    for number in range(1, total_pages + 1):
+        builder.button(text=str(number), callback_data=PagesCallback(number=number))
+    builder.button(
+        text=constants.BUTTONS['back'], callback_data=NavigationCallback(where='menu')
+    )
+    # TO DO: create dynamic adjust param for pages
+    return builder.adjust(total_pages, 1).as_markup(resize_keyboard=True)
