@@ -31,7 +31,7 @@ class UserSettings(Base, Dates):
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     language: Mapped[str] = mapped_column(String(2), default="RU")
-    local_currency: Mapped[str] = mapped_column(String(3), default="USD")
+    local_currency: Mapped[str] = mapped_column(String(3), default="RUB")
 
     user = relationship("Users", foreign_keys=[user_id])
 
@@ -41,8 +41,8 @@ class Wallets(Base, Dates):
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     currency_id: Mapped[int] = mapped_column(ForeignKey("currency.id"))
-    amount = mapped_column(DOUBLE, nullable=False)
-    freeze_amount = mapped_column(DOUBLE, nullable=False)
+    amount = mapped_column(DOUBLE, nullable=False, default=0.00)
+    frozen_amount = mapped_column(DOUBLE, nullable=False, default=0.00)
     address: Mapped[str] = mapped_column(String(50))
 
     user = relationship("Users", back_populates="wallet")
@@ -69,6 +69,8 @@ class Withdraw(Base, Dates):
     chat_id: Mapped[float]
     message_id: Mapped[float]
     chat_name: Mapped[str] = mapped_column(String(100))
+    confirmation: Mapped[int]
+    sign: Mapped[str] = mapped_column(String(50))
 
     currency = relationship("Currency", foreign_keys=[currency_id])
     wallet = relationship("Wallets", foreign_keys=[wallet_id])
