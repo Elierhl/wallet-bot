@@ -40,7 +40,7 @@ class Wallets(Base, Dates):
     __tablename__ = "wallets"
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    currency_id: Mapped[int] = mapped_column(ForeignKey("currency.id"))
+    currency_id: Mapped[int] = mapped_column(ForeignKey("currencies.id"))
     amount = mapped_column(DOUBLE, nullable=False, default=0.00)
     frozen_amount = mapped_column(DOUBLE, nullable=False, default=0.00)
     address: Mapped[str] = mapped_column(String(50))
@@ -48,17 +48,17 @@ class Wallets(Base, Dates):
     user = relationship("Users", back_populates="wallet")
 
 
-class Currency(Base):
-    __tablename__ = "currency"
+class Currencies(Base):
+    __tablename__ = "currencies"
 
     name: Mapped[str] = mapped_column(String(50))
 
 
-class Withdraw(Base, Dates):
-    __tablename__ = "withdraw"
+class Withdrawals(Base, Dates):
+    __tablename__ = "withdrawals"
 
     amount = mapped_column(DOUBLE, nullable=False)
-    currency_id: Mapped[int] = mapped_column(ForeignKey("currency.id"))
+    currency_id: Mapped[int] = mapped_column(ForeignKey("currencies.id"))
     wallet_id: Mapped[int] = mapped_column(ForeignKey("wallets.id"))
     address_to: Mapped[str] = mapped_column(String(50))
     aml: Mapped[str] = mapped_column(String(10))
@@ -72,15 +72,15 @@ class Withdraw(Base, Dates):
     confirmation: Mapped[int]
     sign: Mapped[str] = mapped_column(String(50))
 
-    currency = relationship("Currency", foreign_keys=[currency_id])
+    currency = relationship("Currencies", foreign_keys=[currency_id])
     wallet = relationship("Wallets", foreign_keys=[wallet_id])
 
 
-class Deposit(Base, Dates):
-    __tablename__ = "deposit"
+class Deposits(Base, Dates):
+    __tablename__ = "deposits"
 
     amount = mapped_column(DOUBLE, nullable=False)
-    currency_id: Mapped[int] = mapped_column(ForeignKey("currency.id"))
+    currency_id: Mapped[int] = mapped_column(ForeignKey("currencies.id"))
     wallet_id: Mapped[int] = mapped_column(ForeignKey("wallets.id"))
     address_from: Mapped[str] = mapped_column(String(50))
     aml: Mapped[str] = mapped_column(String(10))
@@ -88,24 +88,24 @@ class Deposit(Base, Dates):
     state: Mapped[bool]
     sign: Mapped[str] = mapped_column(String(50))
 
-    currency = relationship("Currency", foreign_keys=[currency_id])
+    currency = relationship("Currencies", foreign_keys=[currency_id])
     wallet = relationship("Wallets", foreign_keys=[wallet_id])
 
 
-class Commission(Base, Dates):
-    __tablename__ = "commission"
+class Commissions(Base, Dates):
+    __tablename__ = "commissions"
 
     amount = mapped_column(DOUBLE, nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    currency_id: Mapped[int] = mapped_column(ForeignKey("currency.id"))
-    active: Mapped[bool] = mapped_column(default=True)
+    currency_id: Mapped[int] = mapped_column(ForeignKey("currencies.id"))
+    is_active: Mapped[bool] = mapped_column(default=True)
 
     user = relationship("Users", foreign_keys=[user_id])
-    currency = relationship("Currency", foreign_keys=[currency_id])
+    currency = relationship("Currencies", foreign_keys=[currency_id])
 
 
-class Exchange(Base, Dates):
-    __tablename__ = "exchange"
+class Exchanges(Base, Dates):
+    __tablename__ = "exchanges"
 
     amount = mapped_column(DOUBLE, nullable=False)
     rate = mapped_column(DOUBLE, nullable=False)
