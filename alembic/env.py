@@ -13,11 +13,12 @@ from bot.common.config import settings
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
-from bot.schemas import *  # noqa
+from bot.db.schemas import *  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+config.set_main_option('sqlalchemy.url', os.getenv("DB_URL", ""))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -48,7 +49,8 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = settings.DB_URL
+    configuration = config.get_section(config.config_ini_section)
+    url = configuration["sqlalchemy.url"]
     context.configure(
         url=url,
         target_metadata=target_metadata,
